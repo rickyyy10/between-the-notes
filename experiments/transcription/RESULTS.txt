@@ -1,0 +1,83 @@
+Yi singing transcription pilot — 118 / 119
+
+Historical results from 15 November 2026. Copied into the code repository
+without rerunning the models; reproduction paths below reflect this location.
+
+Open: http://127.0.0.1:4187/transcription/
+The existing demo server serves the separate trial page. English / 中文 toggle.
+
+RESULTS
+118 (12.617 s): pYIN heuristic = 25 notes; Basic Pitch raw = 35 notes.
+119 (9.012 s): pYIN heuristic = 24 notes; Basic Pitch raw = 30 notes.
+Basic Pitch overlap as a fraction of full recording time: 9.29% / 3.22%.
+Joint-frame nearest-note agreement within 50 cents: 90.41% / 78.82%.
+Basic Pitch coverage of pYIN voiced frames: 92.94% / 89.75%.
+These are inter-method comparisons, NOT transcription accuracy. No reference
+score or expert annotation is available. Polyphonic output inflates nearest-note agreement.
+
+Inspect 119 at 7.736–7.945 s: Basic Pitch includes E6 (MIDI 88), while pYIN
+estimates around F#3 (54), ~34 semitones apart. Suspected upper-partial confusion,
+not a proven error; source audio must be reviewed. Do not interpret raw overlaps
+as detected chords. pYIN segmentation also fragments some sustained contours
+near quantization boundaries and may miss repeated notes at the same pitch.
+
+CONCLUSION
+Automatic melody-to-note conversion is feasible as an inspectable draft.
+Neither output is a verified score. Retain original audio + continuous pitch,
+allow correction of note boundaries and pitch, determine tonic/meter with an
+informed annotator, then engrave standard numbered notation or propose chords.
+This pilot does not establish a fixed harmony or authentic traditional accompaniment.
+
+FILES
+dist/transcription/ contains the bilingual viewer, results.json, CSV,
+MIDI, WAV synthesized previews, and PNG comparisons. Synthetic tones preserve
+estimated timing; they do not emulate the singer. The reference 1=C4 is only a
+notation display choice, not an estimated key. CSV uses this fixed reference.
+Standard .mid previews use integer notes and a 120-BPM storage timebase;
+*-basic-pitch-with-bends.mid retains the original model's pitch bends.
+The on-page timeline retains seconds and octave dots; it is not a finished
+metered score with validated rhythmic values. All audio remains local.
+
+METHODS / SOURCES
+Basic Pitch 0.4.0 official packaged ICASSP-2022 ONNX model, default thresholds
+(onset .5, frame .3, min note 127.7 ms, unrestricted pitch range, melodia=True).
+Model hash and full parameters are in results.json.
+https://github.com/spotify/basic-pitch
+Bittner et al., A Lightweight Instrument-Agnostic Model for Polyphonic Note
+Transcription and Multipitch Estimation, ICASSP 2022.
+https://arxiv.org/abs/2203.09893
+
+librosa 1.0.1 pYIN: 22050 Hz, frame 2048, hop 256, C2–C6, voiced probability >=.1.
+Five-frame median smoothing inside voiced runs, nearest A440 semitone rounding,
+remove segments shorter than 100 ms, merge equal notes across gaps <=80 ms.
+https://librosa.org/doc/latest/generated/librosa.pyin.html
+Mauch & Dixon, pYIN: A Fundamental Frequency Estimator Using Probabilistic
+Threshold Distributions, ICASSP 2014.
+Tony was NOT installed or run. This custom note segmentation is NOT Tony's
+note-tracking algorithm, nor does this trial evaluate Tony's manual workflow.
+https://sonicvisualiser.org/tony/
+
+REPRODUCE
+From the repository root, using a separately prepared experiment environment:
+  python experiments/transcription/scripts/run_trial.py
+
+Regeneration overwrites generated results in dist/transcription/.
+
+The isolated environment uses Python 3.14.7 and ONNX Runtime 1.32.0.
+Basic Pitch's declared optional macOS TensorFlow/CoreML dependencies are not
+installed; its official packaged ONNX model was explicitly used instead.
+Basic Pitch is installed with --no-deps. This newer Python/librosa setup is
+outside its advertised compatibility list; inference completed for both files.
+requirements-lock.txt records all installed versions, including runtime packages.
+For the same setup, install basic-pitch==0.4.0 with --no-deps, then the other
+locked packages (exclude basic-pitch from the dependency-resolved install).
+The source MP3 files are dist/audio/ecura-0118.mp3 and ecura-0119.mp3.
+Generated .npz files preserve Basic Pitch frame/onset/contour activations under
+experiments/transcription/.cache/activations/. They are not committed.
+
+VALIDATION
+All four WAVs decode with correct durations and nonzero RMS; no clipping.
+Browser checks: both records, all six audio sources load/play with advancing
+clocks, solo playback, note snippet audition, language/reference selection,
+mobile document width, and no page errors. Physical speaker output in the user's
+Edge session was not checked. No expert listening accuracy claim is made.

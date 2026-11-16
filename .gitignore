@@ -4,3 +4,13 @@ qa/
 __pycache__/
 *.pyc
 .DS_Store
+node_modules/
+.openai/
+.env
+.env.*
+!.env.example
+*.log
+playwright-report/
+test-results/
+# Superseded local presentation draft, not current project documentation.
+/docs/presenter-notes.md

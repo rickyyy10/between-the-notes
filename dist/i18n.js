@@ -12,3 +12,22 @@ export const glosses={
 'pair-7':'Today is a good day.\nIt is a good day.',
 'pair-8':'Three Neimi pots.\nThey are pots for distilling liquor.'
 };
+
+Object.assign(zh,{
+ heroFigureKicker:'先看一眼 · 两条人声',heroReadHint:'跟随线条的高低，观察声音如何上行与下行。',heroPlotTitle:'同样的中文文本，不同的声音路径',heroPlotNote:'实线为估计音高，虚线仅辅助阅读',heroPrompt:'先看整体走向。<br>再听见每个细节。',chartView:'读图方式',guidedContour:'旋律走向',rawEstimates:'原始估计',guidedHint:'轻度平滑 · 短缺口辅助线',rawHint:'保留全部原始估计与缺口',readHeight:'线越高 → 音越高',readTime:'向右看 → 时间向前',readEnergy:'底部色带 → 录音内部相对能量',plotGuide:'单击定位试听 · 拖拽选择片段 · 悬停查看数值',keyPitch:'实线：估计音高',keyBridge:'虚线：短缺口的阅读辅助线',keyGap:'留白：没有可靠音高估计',contourExplanation:'这些线条如何处理？',contourMethod:'旋律走向模式在有效片段内使用三点中值平滑；仅当缺口不超过 0.30 秒、两端相差不超过 4 个半音时，用虚线辅助连接。虚线不是恢复出的测量值，缺失音高也不等于静音。原始估计模式不做平滑或连接，所有统计指标仍由原始数据计算。',pairInsights:'当前两条录音的实测对照',durationDifference:'先比较时长',medianPitchDifference:'再比较中位音高',medianClose:'中位音高接近，走向仍可能不同',medianApart:'中位音高不同，可切换到相对音高',medianHelp:'中位数描述音区，不表示旋律相同或情绪相同。',recordingLength:'录音时长',pitchHigher:'音更高',pitchLower:'音更低',timeFlows:'时间向前',energyStrip:'相对能量',medianPitch:'中位音高',recordingEnd:'录音结束',noPitchHere:'此处无可靠音高估计',hoverListen:'悬停查看 · 单击试听',heroChartTitle:'118 与 119 的音高走势，共享时间和音高尺度'
+});
+Object.assign(extraEn,{
+ heroFigureKicker:'A FIRST LOOK · TWO VOICES',heroReadHint:'Follow the height of each line to see how the voice rises and falls.',heroPlotTitle:'Shared Chinese text. Different vocal paths.',heroPlotNote:'Solid: estimated pitch · dashed: reading guide',heroPrompt:'See the overall shape.<br>Then listen to the details.',chartView:'Chart view',guidedContour:'Guided contour',rawEstimates:'Original estimates',guidedHint:'Light smoothing · short-gap guides',rawHint:'All original estimates and gaps',readHeight:'Higher line → higher pitch',readTime:'Move right → time moves forward',readEnergy:'Lower strip → energy within each recording',plotGuide:'Click to seek · drag to select a passage · hover for values',keyPitch:'Solid: estimated pitch',keyBridge:'Dashed: guide across a short gap',keyGap:'Blank: no reliable pitch estimate',contourExplanation:'How are the lines processed?',contourMethod:'Guided contours use a three-sample median inside valid segments. Dashed bridges span gaps no longer than 0.30 s only when endpoints differ by at most four semitones. They guide reading; they are not recovered measurements. Missing pitch does not mean silence. Original estimates use neither smoothing nor bridges. All metrics use the original data.',pairInsights:'Measured comparison of the current pair',durationDifference:'First, compare duration',medianPitchDifference:'Then, compare median pitch',medianClose:'Similar median pitch; the contours can still differ',medianApart:'Different medians; try centering each voice',medianHelp:'The median describes register, not a shared melody or emotion.',recordingLength:'Recording length',pitchHigher:'Higher pitch',pitchLower:'Lower pitch',timeFlows:'Time moves forward',energyStrip:'Relative energy',medianPitch:'Median pitch',recordingEnd:'Recording ends',noPitchHere:'No reliable pitch here',hoverListen:'Hover to inspect · click to listen',heroChartTitle:'Pitch contours for 118 and 119 on shared time and pitch scales'
+});
+
+Object.assign(zh,{heroSolidKey:'实线：估计音高',heroBridgeKey:'虚线：短缺口阅读辅助',heightMeaning:'线越高，音越高',heroDurationLead:'A 的录音比 B 长',heroDurationTail:'秒',energyMeaning:'相对能量 · 色带越饱满，能量越强',recordEnded:'录音结束'});
+Object.assign(extraEn,{heroSolidKey:'Solid: estimated pitch',heroBridgeKey:'Dashed: short-gap guide',heightMeaning:'Higher line, higher pitch',heroDurationLead:'A lasts',heroDurationTail:'seconds longer than B',energyMeaning:'Relative energy · Fuller shape = more energy',recordEnded:'Recording ends'});
+
+Object.assign(zh,{browseCases:'浏览 8 组对照',undoEdit:'撤销编辑',regenerated:'已重新生成伴奏，可撤销恢复编辑'});
+Object.assign(extraEn,{browseCases:'Browse 8 comparisons',undoEdit:'Undo edit',regenerated:'Accompaniment regenerated. Undo restores your edits.'});
+
+Object.assign(zh,{relisten:'重听',pauseReplay:'暂停',resumeReplay:'继续'});
+Object.assign(extraEn,{relisten:'Listen again',pauseReplay:'Pause',resumeReplay:'Resume'});
+
+Object.assign(zh,{saveChoice:'保存伴奏设置',exportNotes:'下载已保存的设置',emptyExport:'请先保存一组伴奏设置',noteCount:'组设置',privacy:'设置保存在当前浏览器。'});
+Object.assign(extraEn,{saveChoice:'Save accompaniment settings',exportNotes:'Download saved settings',emptyExport:'Save accompaniment settings first.',noteCount:'saved settings',privacy:'Settings stay in this browser.'});

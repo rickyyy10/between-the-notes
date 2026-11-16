@@ -10,7 +10,7 @@ export class AudioEngine {
     this.record = null;
     this.buffer = null;
     this.cache = new Map();
-    this.mix = { accompaniment: false, texture: 'soft', activity: 0.4, presence: 0.35 };
+    this.mix = { accompaniment: false, texture: 'soft', activity: 0.4, presence: 0.35, events: null };
     this.onTick = null;
     this._playing = false;
     this._offset = 0;
@@ -157,15 +157,16 @@ export class AudioEngine {
 
   setMix(options = {}) {
     const old = { ...this.mix };
+    const oldEvents = JSON.stringify(this.mix.events ?? null);
     this._applyMixOptions(options);
     this._updateAccompanimentGain();
-    if (this._playing && (old.texture !== this.mix.texture || old.activity !== this.mix.activity)) {
+    if (this._playing && (old.texture !== this.mix.texture || old.activity !== this.mix.activity || oldEvents !== JSON.stringify(this.mix.events ?? null))) {
       const now = this.currentTime;
       this._clearSynths();
       this._scheduleAccompaniment(now);
     }
     this._notify();
-    return { ...this.mix };
+    return { ...this.mix, events: this.mix.events?.map(event => ({ ...event })) ?? null };
   }
 
   _applyMixOptions(options) {
@@ -173,6 +174,10 @@ export class AudioEngine {
     if (['soft', 'pluck', 'percussion'].includes(options.texture)) this.mix.texture = options.texture;
     if (Number.isFinite(options.activity)) this.mix.activity = clamp(options.activity, 0, 1);
     if (Number.isFinite(options.presence)) this.mix.presence = clamp(options.presence, 0, 1);
+    // null returns to the generated pattern; [] intentionally removes every event.
+    if ('events' in options && (options.events === null || Array.isArray(options.events))) {
+      this.mix.events = options.events === null ? null : options.events.map(event => ({ ...event }));
+    }
   }
 
   _updateAccompanimentGain() {
@@ -187,6 +192,7 @@ export class AudioEngine {
   /** Return all proposed events, even in Original mode, to visualize the design. */
   getEvents() {
     if (!this.record) return [];
+    if (Array.isArray(this.mix.events)) return normalizeArrangementEvents(this.mix.events, this.record, this.mix.texture, this.buffer?.duration);
     const key = `${this.record.id}|${this.mix.texture}|${this.mix.activity}`;
     if (key === this._eventKey) return this._events.map(event => ({ ...event }));
     this._eventKey = key;
@@ -321,6 +327,22 @@ export class AudioEngine {
     if (this._raf !== null) cancelAnimationFrame(this._raf);
     this._raf = null;
   }
+}
+
+/** Clone and constrain user-authored events to the selected recording. */
+export function normalizeArrangementEvents(events, record, defaultKind = 'soft', bufferDuration = Infinity) {
+  const duration = Math.min(Number(record?.duration) || 0, bufferDuration || Infinity);
+  if (!(duration > .02) || !Array.isArray(events)) return [];
+  let fallbackFrequency = Number(record?.metrics?.pitchMedianHz) || 140;
+  while (fallbackFrequency > 220) fallbackFrequency /= 2;
+  while (fallbackFrequency < 85) fallbackFrequency *= 2;
+  return events.slice(0, 256).flatMap((event, index) => {
+    if (!event || !Number.isFinite(event.time) || !Number.isFinite(event.duration) || event.duration <= 0) return [];
+    const kind = ['soft', 'pluck', 'percussion'].includes(event.kind) ? event.kind : ['soft', 'pluck', 'percussion'].includes(defaultKind) ? defaultKind : 'soft';
+    const time = clamp(event.time, 0, duration - .02);
+    const frequency = kind === 'percussion' ? null : clamp(Number.isFinite(event.frequency) && event.frequency > 0 ? event.frequency : fallbackFrequency, 40, 2000);
+    return [{id: String(event.id ?? `event-${index}`).slice(0, 100), time, duration: clamp(event.duration, .02, duration - time), kind, frequency}];
+  }).sort((a, b) => a.time - b.time);
 }
 
 function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }

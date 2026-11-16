@@ -1,8 +1,8 @@
 # Course evidence for the Yi singing demo
 
-Reviewed 2026-11-15. Source directory: `/Users/luoguiqi/Desktop/26full/Visualization/ppt`.
+Reviewed 2026-11-15. Sources: the 13 course lecture PDFs supplied in the course `ppt/` folder. Lecture files are kept outside this code repository.
 
-All 13 PDF files were text-extracted (1,372 PDF pages in total). The lecture topics, relevant principle pages, and concluding example sections were inspected. Selected example pages were also rendered and visually inspected; PNGs and two contact sheets are in `course/`. Video poster frames in PDFs do not establish the behavior of an embedded video; the video itself was not played.
+All 13 PDF files were text-extracted (1,372 PDF pages in total). The lecture topics, relevant principle pages, and concluding example sections were inspected. Selected example pages were also rendered and visually inspected; the review images remain in the local research workspace. Video poster frames in PDFs do not establish the behavior of an embedded video; the video itself was not played.
 
 **All page references below are one-based PDF page numbers, not necessarily the slide footer numbers.** This distinction matters especially in Lectures 5–13.
 
@@ -21,6 +21,13 @@ All 13 PDF files were text-extracted (1,372 PDF pages in total). The lecture top
 | Keep model-based evidence inspectable | L13 p10, p27–29, p57–59; final multimodal case p94–101 | Show confidence/quality flags and allow listening to suspicious regions. Predicted pitch is evidence to examine, not a ground-truth transcript or a direct measure of emotion. |
 | Prefer a simple visual comparison when it answers the question | L13 p96 compares histogram/density/violin/beeswarm; p99 contrasts a simpler comparison with a cluttered Sankey | Use paired dots/bars for aggregate duration or energy measures and curves for temporal structure. Do not add a Sankey/radar/3D view merely to demonstrate techniques. |
 | Start novice users with understandable choices; expose detail gradually | L2 p6–8 and final postcard case p115–121; L12 p39–41, p56; final support examples p133–137 and p148–149 | A few audible accompaniment starting points, then optional density/loudness controls and reset. These are transfers of interaction principles, not evidence that music novices will succeed. |
+
+## Implemented exploration additions (2026-11-16)
+
+- The eight paired miniature plots use common pitch and duration scales and select the detailed comparison. This applies the existing L4/L7 small-multiples and L12 overview-to-detail principles above.
+- Brushing a recording opens a second, enlarged view while retaining its overview. The detail preserves the shared pitch domain and original seconds; playback and seeking are linked. This extends the L11/L12 linked-view application without time-warping performances.
+- The words section retains the supplied Chinese text, a working English gloss and expandable original Yi pronunciation. The source has no verified time alignment, so this section presents text without line-to-audio associations.
+- The accompaniment waveform and three sound lanes share original time. Event movement, duration edits, addition, deletion and undo make the proposed change visible and audible; switching to the original preserves the vocal transport. Novice usability still requires an actual pilot.
 
 ## Lecture-by-lecture coverage and concluding examples
 
@@ -81,3 +88,11 @@ These references are sources for design principles, not a claim to have independ
 - Contact sheets: `DVproject/demo-research/course/montage-1.png`, `montage-2.png`.
 
 The course PDFs and the user's original design PDF were not modified.
+
+## Contour readability revision — 2026-11-16
+
+The hero uses directly labeled, aligned small multiples on shared time and pitch scales (L4). Detailed views retain shared axes, a recording-end background, hover inspection, a moving pitch marker and time brushing (L11–12). Colored recording cards preserve identity without relying on color alone. At the user's request, added insight cards, reading instructions, mode controls and on-chart explanatory legends have been removed; the revision now focuses on appearance and existing interaction.
+
+Display processing uses a three-sample median only within contiguous valid runs, with monotone interpolation between those samples. Solid lines and their area backgrounds stop at missing estimates. A separate dashed guide bridges endpoints only if separated by at most 0.30 s and four semitones. This is a display transformation, not recovered measurements, note transcription or a confidence interval (L5/L13). Source frames, all metrics and audio remain unchanged. Energy is normalized within each recording.
+
+Geometry tests cover all 17 recordings and source immutability. Browser checks cover all eight pairs, optional reference, relative axes, brushing, playback, both languages and mobile width. Readability has been visually inspected but not evaluated in a participant study.
